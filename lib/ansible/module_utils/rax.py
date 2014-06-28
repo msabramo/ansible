@@ -84,7 +84,7 @@ def setup_rax_module(module, rax_module):
                        os.environ.get('RAX_CREDS_FILE'))
         region = (region or os.environ.get('RAX_REGION') or
                   rax_module.get_setting('region'))
-    except KeyError, e:
+    except KeyError as e:
         module.fail_json(msg='Unable to load %s' % e.message)
 
     try:
@@ -99,7 +99,7 @@ def setup_rax_module(module, rax_module):
             rax_module.set_credential_file(credentials, region=region)
         else:
             raise Exception('No credentials supplied!')
-    except Exception, e:
+    except Exception as e:
         module.fail_json(msg='%s' % e.message)
 
     return rax_module

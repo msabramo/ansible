@@ -517,7 +517,7 @@ class Runner(object):
             if not new_stdin and fileno is not None:
                 try:
                     self._new_stdin = os.fdopen(os.dup(fileno))
-                except OSError, e:
+                except OSError as e:
                     # couldn't dupe stdin, most likely because it's
                     # not a valid file descriptor, so we just rely on
                     # using the one that was passed in
@@ -530,7 +530,7 @@ class Runner(object):
             if not exec_rc.comm_ok:
                 self.callbacks.on_unreachable(host, exec_rc.result)
             return exec_rc
-        except errors.AnsibleError, ae:
+        except errors.AnsibleError as ae:
             msg = str(ae)
             self.callbacks.on_unreachable(host, msg)
             return ReturnData(host=host, comm_ok=False, result=dict(failed=True, msg=msg))
@@ -791,7 +791,7 @@ class Runner(object):
                 actual_port = [actual_port, self.accelerate_port]
             elif actual_port is not None:
                 actual_port = int(template.template(self.basedir, actual_port, inject))
-        except ValueError, e:
+        except ValueError as e:
             result = dict(failed=True, msg="FAILED: Configured port \"%s\" is not a valid port, expected integer" % actual_port)
             return ReturnData(host=host, comm_ok=False, result=result)
 
@@ -813,7 +813,7 @@ class Runner(object):
                 shell_plugin = utils.plugins.shell_loader.get('sh')
             conn.shell = shell_plugin
 
-        except errors.AnsibleConnectionFailed, e:
+        except errors.AnsibleConnectionFailed as e:
             result = dict(failed=True, msg="FAILED: %s" % str(e))
             return ReturnData(host=host, comm_ok=False, result=result)
 
@@ -826,7 +826,7 @@ class Runner(object):
         try:
             module_args = template.template(self.basedir, module_args, inject, fail_on_undefined=self.error_on_undefined_vars)
             complex_args = template.template(self.basedir, complex_args, inject, fail_on_undefined=self.error_on_undefined_vars)
-        except jinja2.exceptions.UndefinedError, e:
+        except jinja2.exceptions.UndefinedError as e:
             raise errors.AnsibleUndefinedVariable("One or more undefined variables: %s" % str(e))
 
 
@@ -1124,7 +1124,7 @@ class Runner(object):
             if fileno is not None:
                 try:
                     new_stdin = os.fdopen(os.dup(fileno))
-                except OSError, e:
+                except OSError as e:
                     # couldn't dupe stdin, most likely because it's
                     # not a valid file descriptor, so we just rely on
                     # using the one that was passed in
@@ -1218,7 +1218,7 @@ class Runner(object):
         elif self.forks > 1:
             try:
                 results = self._parallel_exec(hosts)
-            except IOError, ie:
+            except IOError as ie:
                 print ie.errno
                 if ie.errno == 32:
                     # broken pipe from Ctrl+C

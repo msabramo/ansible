@@ -61,7 +61,7 @@ def _load_vars_from_path(path, results, vault_password=None):
         # in the case of a symbolic link, we want the stat of the link itself,
         # not its target
         pathstat = os.lstat(path)
-    except os.error, err:
+    except os.error as err:
         # most common case is that nothing exists at that path.
         if err.errno == errno.ENOENT:
             return False, results
@@ -74,7 +74,7 @@ def _load_vars_from_path(path, results, vault_password=None):
     if stat.S_ISLNK(pathstat.st_mode):
         try:
             target = os.path.realpath(path)
-        except os.error, err2:
+        except os.error as err2:
             raise errors.AnsibleError("The symbolic link at %s "
                 "is not readable: %s.  Please check its permissions."
                 % (path, err2.strerror, ))
@@ -114,7 +114,7 @@ def _load_vars_from_folder(folder_path, results, vault_password=None):
 
     try:
         names = os.listdir(folder_path)
-    except os.error, err:
+    except os.error as err:
         raise errors.AnsibleError(
             "This folder cannot be listed: %s: %s." 
              % ( folder_path, err.strerror))

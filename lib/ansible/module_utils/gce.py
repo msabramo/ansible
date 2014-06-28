@@ -55,9 +55,9 @@ def gce_connect(module):
         gce = get_driver(Provider.GCE)(service_account_email, pem_file, datacenter=module.params.get('zone'), project=project_id)
         gce.connection.user_agent_append("%s/%s" % (
             USER_AGENT_PRODUCT, USER_AGENT_VERSION))
-    except (RuntimeError, ValueError), e:
+    except (RuntimeError, ValueError) as e:
         module.fail_json(msg=str(e), changed=False)
-    except Exception, e:
+    except Exception as e:
         module.fail_json(msg=unexpected_error_msg(e), changed=False)
 
     return gce

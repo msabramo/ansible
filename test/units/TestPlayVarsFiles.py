@@ -213,7 +213,7 @@ class TestMe(unittest.TestCase):
 
         try:
             play = Play(playbook, ds, basedir)
-        except ansible.errors.AnsibleError, e:
+        except ansible.errors.AnsibleError as e:
             error_hit = True
             error_msg = e
 

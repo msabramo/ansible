@@ -27,6 +27,6 @@ class TestModules(unittest.TestCase):
         for m in module_list:
             try:
                 ast.parse(''.join(open(m)))
-            except Exception, e:
+            except Exception as e:
                 ERRORS.append((m, e))
         assert len(ERRORS) == 0, "get_docstring errors: %s" % ERRORS

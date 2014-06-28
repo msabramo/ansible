@@ -68,7 +68,7 @@ class LookupModule(object):
                         paramvals['chars'] = use_chars
                     else:
                         paramvals[name] = value
-            except (ValueError, AssertionError), e:
+            except (ValueError, AssertionError) as e:
                 raise errors.AnsibleError(e)
 
             length  = paramvals['length']

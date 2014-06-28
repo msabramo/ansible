@@ -387,7 +387,7 @@ class AnsibleModule(object):
             return context
         try:
             ret = selinux.lgetfilecon_raw(self._to_filesystem_str(path))
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.ENOENT:
                 self.fail_json(path=path, msg='path %s does not exist' % path)
             else:
@@ -522,7 +522,7 @@ class AnsibleModule(object):
             # FIXME: support English modes
             if not isinstance(mode, int):
                 mode = int(mode, 8)
-        except Exception, e:
+        except Exception as e:
             self.fail_json(path=path, msg='mode needs to be something octalish', details=str(e))
 
         st = os.lstat(path)
@@ -538,14 +538,14 @@ class AnsibleModule(object):
                     os.lchmod(path, mode)
                 else:
                     os.chmod(path, mode)
-            except OSError, e:
+            except OSError as e:
                 if os.path.islink(path) and e.errno == errno.EPERM:  # Can't set mode on symbolic links
                     pass
                 elif e.errno == errno.ENOENT: # Can't set mode on broken symbolic links
                     pass
                 else:
                     raise e
-            except Exception, e:
+            except Exception as e:
                 self.fail_json(path=path, msg='chmod failed', details=str(e))
 
             st = os.lstat(path)
@@ -627,14 +627,14 @@ class AnsibleModule(object):
             # setting the locale to '' uses the default locale
             # as it would be returned by locale.getdefaultlocale()
             locale.setlocale(locale.LC_ALL, '')
-        except locale.Error, e:
+        except locale.Error as e:
             # fallback to the 'C' locale, which may cause unicode
             # issues but is preferable to simply failing because
             # of an unknown locale
             locale.setlocale(locale.LC_ALL, 'C')
             os.environ['LANG']     = 'C'
             os.environ['LC_CTYPE'] = 'C'
-        except Exception, e:
+        except Exception as e:
             self.fail_json(msg="An unknown error was encountered while attempting to validate the locale: %s" % e)
 
     def _handle_aliases(self):
@@ -765,7 +765,7 @@ class AnsibleModule(object):
                 return (result, None)
             else:
                 return result
-        except Exception, e:
+        except Exception as e:
             if include_exceptions:
                 return (str, e)
             return str
@@ -854,7 +854,7 @@ class AnsibleModule(object):
         for x in items:
             try:
                 (k, v) = x.split("=",1)
-            except Exception, e:
+            except Exception as e:
                 self.fail_json(msg="this module requires key=value arguments (%s)" % (items))
             params[k] = v
         params2 = json.loads(MODULE_COMPLEX_ARGS)
@@ -913,7 +913,7 @@ class AnsibleModule(object):
         # 6655 - allow for accented characters
         try:
             msg = msg.encode('utf8')
-        except UnicodeDecodeError, e:
+        except UnicodeDecodeError as e:
             pass
 
         if (has_journal):
@@ -923,7 +923,7 @@ class AnsibleModule(object):
                 journal_args.append(arg.upper() + "=" + str(log_args[arg]))
             try:
                 journal.sendv(*journal_args)
-            except IOError, e:
+            except IOError as e:
                 # fall back to syslog since logging to journal failed
                 syslog.openlog(str(module), 0, syslog.LOG_USER)
                 syslog.syslog(syslog.LOG_NOTICE, msg) #1
@@ -997,9 +997,9 @@ class AnsibleModule(object):
             try:
                 return json.dumps(data, encoding=encoding)
             # Old systems using simplejson module does not support encoding keyword.
-            except TypeError, e:
+            except TypeError as e:
                 return json.dumps(data)
-            except UnicodeDecodeError, e:
+            except UnicodeDecodeError as e:
                 continue
         self.fail_json(msg='Invalid unicode encoding encountered')
 
@@ -1072,7 +1072,7 @@ class AnsibleModule(object):
 
         try:
             shutil.copy2(fn, backupdest)
-        except shutil.Error, e:
+        except shutil.Error as e:
             self.fail_json(msg='Could not make backup of %s to %s: %s' % (fn, backupdest, e))
         return backupdest
 
@@ -1080,7 +1080,7 @@ class AnsibleModule(object):
         if os.path.exists(tmpfile):
             try:
                 os.unlink(tmpfile)
-            except OSError, e:
+            except OSError as e:
                 sys.stderr.write("could not cleanup %s: %s" % (tmpfile, e))
 
     def atomic_move(self, src, dest):
@@ -1094,7 +1094,7 @@ class AnsibleModule(object):
                 dest_stat = os.stat(dest)
                 os.chmod(src, dest_stat.st_mode & 07777)
                 os.chown(src, dest_stat.st_uid, dest_stat.st_gid)
-            except OSError, e:
+            except OSError as e:
                 if e.errno != errno.EPERM:
                     raise
             if self.selinux_enabled():
@@ -1120,7 +1120,7 @@ class AnsibleModule(object):
         try:
             # Optimistically try a rename, solves some corner cases and can avoid useless work, throws exception if not atomic.
             os.rename(src, dest)
-        except (IOError,OSError), e:
+        except (IOError,OSError) as e:
             # only try workarounds for errno 18 (cross device), 1 (not permited) and 13 (permission denied)
             if e.errno != errno.EPERM and e.errno != errno.EXDEV and e.errno != errno.EACCES:
                 self.fail_json(msg='Could not replace file: %s to %s: %s' % (src, dest, e))
@@ -1144,7 +1144,7 @@ class AnsibleModule(object):
                 if dest_stat and (tmp_stat.st_uid != dest_stat.st_uid or tmp_stat.st_gid != dest_stat.st_gid):
                     os.chown(tmp_dest.name, dest_stat.st_uid, dest_stat.st_gid)
                 os.rename(tmp_dest.name, dest)
-            except (shutil.Error, OSError, IOError), e:
+            except (shutil.Error, OSError, IOError) as e:
                 self.cleanup(tmp_dest.name)
                 self.fail_json(msg='Could not replace file: %s to %s: %s' % (src, dest, e))
 
@@ -1252,7 +1252,7 @@ class AnsibleModule(object):
         if cwd and os.path.isdir(cwd):
             try:
                 os.chdir(cwd)
-            except (OSError, IOError), e:
+            except (OSError, IOError) as e:
                 self.fail_json(rc=e.errno, msg="Could not open %s , %s" % (cwd, str(e)))
 
         try:
@@ -1263,7 +1263,7 @@ class AnsibleModule(object):
                     data += '\n'
             out, err = cmd.communicate(input=data)
             rc = cmd.returncode
-        except (OSError, IOError), e:
+        except (OSError, IOError) as e:
             self.fail_json(rc=e.errno, msg=str(e), cmd=clean_args)
         except:
             self.fail_json(rc=257, msg=traceback.format_exc(), cmd=clean_args)

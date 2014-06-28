@@ -188,12 +188,12 @@ class Facts(object):
             fact = 'loading %s' % fact_base
             try:
                 fact = json.loads(out)
-            except ValueError, e:
+            except ValueError as e:
                 # load raw ini
                 cp = ConfigParser.ConfigParser()
                 try:
                     cp.readfp(StringIO.StringIO(out))
-                except ConfigParser.Error, e:
+                except ConfigParser.Error as e:
                     fact="error loading fact - please check content"
                 else:
                     fact = {}
@@ -420,7 +420,7 @@ class Facts(object):
             self.facts['selinux']['status'] = 'enabled'
             try:
                 self.facts['selinux']['policyvers'] = selinux.security_policyvers()
-            except OSError, e:
+            except OSError as e:
                 self.facts['selinux']['policyvers'] = 'unknown'
             try:
                 (rc, configmode) = selinux.selinux_getenforcemode()
@@ -428,12 +428,12 @@ class Facts(object):
                     self.facts['selinux']['config_mode'] = Facts.SELINUX_MODE_DICT.get(configmode, 'unknown')
                 else:
                     self.facts['selinux']['config_mode'] = 'unknown'
-            except OSError, e:
+            except OSError as e:
                 self.facts['selinux']['config_mode'] = 'unknown'
             try:
                 mode = selinux.security_getenforce()
                 self.facts['selinux']['mode'] = Facts.SELINUX_MODE_DICT.get(mode, 'unknown')
-            except OSError, e:
+            except OSError as e:
                 self.facts['selinux']['mode'] = 'unknown'
             try:
                 (rc, policytype) = selinux.selinux_getpolicytype()
@@ -441,7 +441,7 @@ class Facts(object):
                     self.facts['selinux']['type'] = policytype
                 else:
                     self.facts['selinux']['type'] = 'unknown'
-            except OSError, e:
+            except OSError as e:
                 self.facts['selinux']['type'] = 'unknown'
 
 
@@ -621,7 +621,7 @@ class LinuxHardware(Hardware):
                     if key == 'form_factor':
                         try:
                             self.facts['form_factor'] = FORM_FACTOR[int(data)]
-                        except IndexError, e:
+                        except IndexError as e:
                             self.facts['form_factor'] = 'unknown (%s)' % data
                     else:
                         self.facts[key] = data
@@ -672,7 +672,7 @@ class LinuxHardware(Hardware):
                         statvfs_result = os.statvfs(fields[1])
                         size_total = statvfs_result.f_bsize * statvfs_result.f_blocks
                         size_available = statvfs_result.f_bsize * (statvfs_result.f_bavail)
-                    except OSError, e:
+                    except OSError as e:
                         continue
 
                     self.facts['mounts'].append(
@@ -703,7 +703,7 @@ class LinuxHardware(Hardware):
             sysfs_no_links = 0
             try:
                 path = os.readlink(os.path.join("/sys/block/", block))
-            except OSError, e:
+            except OSError as e:
                 if e.errno == errno.EINVAL:
                     path = block
                     sysfs_no_links = 1

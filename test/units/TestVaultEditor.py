@@ -63,7 +63,7 @@ class TestVaultEditor(TestCase):
         error_hit = False
         try:        
             ve.decrypt_file()
-        except errors.AnsibleError, e:
+        except errors.AnsibleError as e:
             error_hit = True
 
         # verify decrypted content
@@ -88,7 +88,7 @@ class TestVaultEditor(TestCase):
         error_hit = False
         try:        
             ve.decrypt_file()
-        except errors.AnsibleError, e:
+        except errors.AnsibleError as e:
             error_hit = True
 
         # verify decrypted content
@@ -114,7 +114,7 @@ class TestVaultEditor(TestCase):
         error_hit = False
         try:        
             ve.decrypt_file()
-        except errors.AnsibleError, e:
+        except errors.AnsibleError as e:
             error_hit = True
 
         # verify decrypted content
@@ -140,7 +140,7 @@ class TestVaultEditor(TestCase):
         error_hit = False
         try:        
             ve.rekey_file('ansible2')
-        except errors.AnsibleError, e:
+        except errors.AnsibleError as e:
             error_hit = True
 
         # verify decrypted content
@@ -157,7 +157,7 @@ class TestVaultEditor(TestCase):
         error_hit = False
         try:
             dec_data = vl.decrypt(fdata)
-        except errors.AnsibleError, e:
+        except errors.AnsibleError as e:
             error_hit = True
 
         assert vl.cipher_name == "AES256", "wrong cipher name set after rekey: %s" % vl.cipher_name

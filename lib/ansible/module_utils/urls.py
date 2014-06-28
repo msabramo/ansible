@@ -252,7 +252,7 @@ class SSLValidationHandler(urllib2.BaseHandler):
             # close the ssl connection
             #ssl_s.unwrap()
             s.close()
-        except (ssl.SSLError, socket.error), e:
+        except (ssl.SSLError, socket.error) as e:
             # fail if we tried all of the certs but none worked
             if 'connection refused' in str(e).lower():
                 self.module.fail_json(msg='Failed to connect to %s:%s.' % (self.hostname, self.port))
@@ -412,9 +412,9 @@ def fetch_url(module, url, data=None, headers=None, method=None,
         info.update(r.info())
         info['url'] = r.geturl()  # The URL goes in too, because of redirects.
         info.update(dict(msg="OK (%s bytes)" % r.headers.get('Content-Length', 'unknown'), status=200))
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         info.update(dict(msg=str(e), status=e.code))
-    except urllib2.URLError, e:
+    except urllib2.URLError as e:
         code = int(getattr(e, 'code', -1))
         info.update(dict(msg="Request failed: %s" % str(e), status=code))
 

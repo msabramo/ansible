@@ -28,7 +28,7 @@ class LookupModule(object):
 
         try:
             terms = template.template(self.basedir, terms, inject)
-        except Exception, e:
+        except Exception as e:
             pass
 
         if isinstance(terms, basestring):
