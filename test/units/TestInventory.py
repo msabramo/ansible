@@ -18,10 +18,10 @@ class TestInventory(unittest.TestCase):
         self.inventory_script           = os.path.join(self.test_dir, 'inventory_api.py')
         self.inventory_dir              = os.path.join(self.test_dir, 'inventory_dir')
 
-        os.chmod(self.inventory_script, 0755)
+        os.chmod(self.inventory_script, 0o755)
 
     def tearDown(self):
-        os.chmod(self.inventory_script, 0644)
+        os.chmod(self.inventory_script, 0o644)
 
     def compare(self, left, right, sort=True):
         if sort:

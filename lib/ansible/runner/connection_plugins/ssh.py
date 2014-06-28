@@ -49,7 +49,7 @@ class Connection(object):
         self.has_pipelining = True
 
         fcntl.lockf(self.runner.process_lockfile, fcntl.LOCK_EX)
-        self.cp_dir = utils.prepare_writeable_dir('$HOME/.ansible/cp',mode=0700)
+        self.cp_dir = utils.prepare_writeable_dir('$HOME/.ansible/cp',mode=0o700)
         fcntl.lockf(self.runner.process_lockfile, fcntl.LOCK_UN)
 
     def connect(self):

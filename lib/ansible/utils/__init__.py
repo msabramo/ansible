@@ -109,7 +109,7 @@ def key_for_hostname(hostname):
 
     key_path = os.path.expanduser(C.ACCELERATE_KEYS_DIR)
     if not os.path.exists(key_path):
-        os.makedirs(key_path, mode=0700)
+        os.makedirs(key_path, mode=0o700)
         os.chmod(key_path, int(C.ACCELERATE_KEYS_DIR_PERMS, 8))
     elif not os.path.isdir(key_path):
         raise errors.AnsibleError('ACCELERATE_KEYS_DIR is not a directory.')
@@ -250,12 +250,12 @@ def unfrackpath(path):
     '''
     return os.path.normpath(os.path.realpath(os.path.expandvars(os.path.expanduser(path))))
 
-def prepare_writeable_dir(tree,mode=0777):
+def prepare_writeable_dir(tree,mode=0o777):
     ''' make sure a directory exists and is writeable '''
 
     # modify the mode to ensure the owner at least
     # has read/write access to this directory
-    mode |= 0700
+    mode |= 0o700
 
     # make sure the tree path is always expanded
     # and normalized and free of symlinks

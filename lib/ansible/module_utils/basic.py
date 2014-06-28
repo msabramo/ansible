@@ -1092,7 +1092,7 @@ class AnsibleModule(object):
         if os.path.exists(dest):
             try:
                 dest_stat = os.stat(dest)
-                os.chmod(src, dest_stat.st_mode & 07777)
+                os.chmod(src, dest_stat.st_mode & 0o7777)
                 os.chown(src, dest_stat.st_uid, dest_stat.st_gid)
             except OSError as e:
                 if e.errno != errno.EPERM:
@@ -1153,7 +1153,7 @@ class AnsibleModule(object):
             # based on the current value of umask
             umask = os.umask(0)
             os.umask(umask)
-            os.chmod(dest, 0666 ^ umask)
+            os.chmod(dest, 0o666 ^ umask)
             if switched_user:
                 os.chown(dest, os.getuid(), os.getgid())
 
@@ -1285,13 +1285,13 @@ class AnsibleModule(object):
 
     def pretty_bytes(self,size):
         ranges = (
-                (1<<70L, 'ZB'),
-                (1<<60L, 'EB'),
-                (1<<50L, 'PB'),
-                (1<<40L, 'TB'),
-                (1<<30L, 'GB'),
-                (1<<20L, 'MB'),
-                (1<<10L, 'KB'),
+                (1<<70, 'ZB'),
+                (1<<60, 'EB'),
+                (1<<50, 'PB'),
+                (1<<40, 'TB'),
+                (1<<30, 'GB'),
+                (1<<20, 'MB'),
+                (1<<10, 'KB'),
                 (1, 'Bytes')
             )
         for limit, suffix in ranges:
