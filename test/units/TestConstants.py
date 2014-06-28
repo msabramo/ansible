@@ -3,7 +3,7 @@
 import unittest
 
 from ansible.constants import get_config
-import ConfigParser
+from ansible.compat import ConfigParser
 import random
 import string
 import os

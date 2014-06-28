@@ -18,8 +18,8 @@
 import os
 import pwd
 import sys
-import ConfigParser
 from string import ascii_letters, digits
+from ansible.compat import ConfigParser
 
 # copied from utils, avoid circular reference fun :)
 def mk_boolean(value):
