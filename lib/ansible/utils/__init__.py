@@ -151,7 +151,7 @@ def decrypt(key, msg):
 def err(msg):
     ''' print an error message to stderr '''
 
-    print >> sys.stderr, msg
+    print(msg, file=sys.stderr)
 
 def exit(msg, rc=1):
     ''' quit with an error to stdout and a failure code '''
@@ -326,7 +326,7 @@ def parse_json(raw_data):
         try:
             tokens = shlex.split(data)
         except:
-            print "failed to parse json: "+ data
+            print("failed to parse json: "+ data)
             raise
 
         for t in tokens:
