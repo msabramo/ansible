@@ -270,6 +270,10 @@ auth_url = (get_fallback(config, 'auth_url') or
             os.environ.get('OS_AUTH_URL', None))
 project_id = (get_fallback(config, 'project_id') or
               os.environ.get('OS_TENANT_NAME', None))
+region_name = (get_fallback(config, 'region_name') or
+               os.environ.get('OS_REGION_NAME', None))
+auth_system = (get_fallback(config, 'auth_system') or
+               os.environ.get('OS_AUTH_SYSTEM', None))
 
 # Determine what type of IP is preferred to return
 prefer_private = False
@@ -283,9 +287,9 @@ client = nova_client.Client(
     username=username,
     api_key=api_key,
     auth_url=auth_url,
-    region_name=config.get('openstack', 'region_name'),
+    region_name=region_name,
     project_id=project_id,
-    auth_system=config.get('openstack', 'auth_system'),
+    auth_system=auth_system,
     service_type=config.get('openstack', 'service_type'),
 )
 
